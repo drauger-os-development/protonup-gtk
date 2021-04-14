@@ -55,7 +55,7 @@ class Main(Gtk.Window):
     def main_menu(self, button):
         """Main initial window for ProtonUp"""
         # Get data to make the window
-        pro_inst = protonup.list_versions()
+        pro_inst = protonup.installed_versions()
         new_pro_inst = pro_inst[0]
         count = 1
         if len(pro_inst) > 1:
