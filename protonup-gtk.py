@@ -23,6 +23,7 @@
 #
 """ProtonUp GTK GUI"""
 import protonup
+import threading
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -91,26 +92,31 @@ class Main(Gtk.Window):
         label2 = Gtk.Label()
         label2.set_markup("Uninstall: ")
         label2.set_justify(Gtk.Justification.LEFT)
+        label2 = self._set_default_margins(label2)
         self.grid.attach(label2, 0, 3, 2, 1)
 
         label3 = Gtk.Label()
         label3.set_markup("Install: ")
         label3.set_justify(Gtk.Justification.LEFT)
+        label3 = self._set_default_margins(label3)
         self.grid.attach(label3, 0, 4, 2, 1)
 
         uninst_select = Gtk.ComboBoxText()
         for each in pro_inst:
             uninst_select.append(each, each)
         uninst_select.connect("changed", self.select_tag)
+        uninst_select = self._set_default_margins(uninst_select)
         self.grid.attach(uninst_select, 2, 3, 3, 1)
 
         inst_select = Gtk.ComboBoxText()
         # Get valid tags from GitHub
         inst_select.connect("changed", self.select_tag)
+        inst_select = self._set_default_margins(inst_select)
         self.grid.attach(inst_select, 2, 4, 3, 1)
 
         uninst_button = Gtk.Button.new_with_label("Uninstall")
         uninst_button.connect("clicked", self.uninst_confirm)
+        uninst_button = self._set_default_margins(uninst_button)
         self.grid.attach(uninst_button, 5, 3, 1, 1)
 
         up_button = Gtk.Button.new_with_label("Update")
@@ -132,10 +138,12 @@ class Main(Gtk.Window):
 
         yes = Gtk.Button.new_with_label("Update")
         yes.connect("clicked", self.update)
+        yes = self._set_default_margins(yes)
         self.grid.attach(yes, 0, 2, 1, 1)
 
         no = Gtk.Button.new_with_label("Cancel")
         no.connect("clicked", self.main_menu)
+        no = self._set_default_margins(no)
         self.grid.attach(no, 2, 2, 1, 1)
 
         self.show_all()
@@ -161,10 +169,12 @@ class Main(Gtk.Window):
 
         yes = Gtk.Button.new_with_label("Install")
         yes.connect("clicked", self.install)
+        yes = self._set_default_margins(yes)
         self.grid.attach(yes, 0, 2, 1, 1)
 
         no = Gtk.Button.new_with_label("Cancel")
         no.connect("clicked", self.main_menu)
+        no = self._set_default_margins(no)
         self.grid.attach(no, 2, 2, 1, 1)
 
         self.show_all()
@@ -183,10 +193,12 @@ class Main(Gtk.Window):
 
         yes = Gtk.Button.new_with_label("Uninstall")
         yes.connect("clicked", self.uninstall)
+        yes = self._set_default_margins(yes)
         self.grid.attach(yes, 0, 2, 1, 1)
 
         no = Gtk.Button.new_with_label("Cancel")
         no.connect("clicked", self.main_menu)
+        no = self._set_default_margins(no)
         self.grid.attach(no, 2, 2, 1, 1)
 
         self.show_all()
@@ -203,11 +215,12 @@ class Main(Gtk.Window):
         label = self._set_default_margins(label)
         self.grid.attach(label, 0, 0, 1, 1)
 
+        timer = threading.Timer(20, self.main_menu, args=".")
+        timer.start()
+
         self.show_all()
 
-        protonup.install(version=self.selected_tag, interactive=False)
-
-        self.main_menu("clicked")
+        protonup.get_proton(version=self.selected_tag)
 
     def uninstall(self, button):
         """Install Proton version in self.selected_tag"""
@@ -221,11 +234,12 @@ class Main(Gtk.Window):
         label = self._set_default_margins(label)
         self.grid.attach(label, 0, 0, 1, 1)
 
+        timer = threading.Timer(5, self.main_menu, args=".")
+        timer.start()
+
         self.show_all()
 
-        protonup.uninstall_proton(self.selected_tag)
-
-        self.main_menu("clicked")
+        protonup.remove_proton(self.selected_tag)
 
     def clear_window(self):
         """Clear Window"""
