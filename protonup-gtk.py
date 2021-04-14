@@ -121,7 +121,13 @@ class Main(Gtk.Window):
 
         up_button = Gtk.Button.new_with_label("Update")
         up_button.connect("clicked", self.up_conf)
-        self.grid.attach(up_button, 0, 5, 10, 1)
+        up_button = self._set_default_margins(up_button)
+        self.grid.attach(up_button, 0, 5, 4, 1)
+
+        refresh_button = Gtk.Button.new_with_label("Refresh")
+        refresh_button.connect("clicked", self.main_menu)
+        refresh_button = self._set_default_margins(refresh_button)
+        self.grid.attach(refresh_button, 5, 5, 5, 1)
 
         # display window changes
         self.show_all()
